@@ -1,0 +1,346 @@
+@import "tailwindcss";
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'Circular', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #fff;
+    overflow-x: hidden;
+    max-width: 100vw;
+    scroll-behavior: smooth;
+    
+  }
+
+ 
+
+  /* Custom scrollbar - optimized */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Thin scrollbar variant */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+}
+
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Smooth transitions */
+  .transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+
+  /* Hover effects */
+  .hover-scale {
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+
+  /* Glass effect */
+  .glass {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(45deg, #1db954, #1ed760);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Spotify background */
+  .spotify-bg {
+    background: linear-gradient(135deg, #000000 0%, #121212 50%, #1a1a1a 100%) !important;
+  }
+
+  .spotify-bg-main {
+    background: linear-gradient(to bottom right, #000000, #121212, #1a1a1a) !important;
+  }
+
+  /* Performance optimizations */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  .smooth-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .optimize-scroll {
+    contain: layout style paint;
+    content-visibility: auto;
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Hardware acceleration for animations */
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .will-change-opacity {
+    will-change: opacity;
+  }
+
+  .will-change-auto {
+    will-change: auto;
+  }
+
+  /* Fix content area padding to prevent right edge cutoff */
+  .content-area {
+    padding-left: 1.5rem; /* 24px */
+    padding-right: 2rem; /* 32px */
+  }
+
+  @media (max-width: 768px) {
+    .content-area {
+      padding-left: 1rem; /* 16px */
+      padding-right: 1.5rem; /* 24px */
+    }
+  }
+
+  /* Page content padding utility */
+  .page-padding {
+    padding-left: 1rem; /* 16px on mobile */
+    padding-right: 1.5rem; /* 24px on mobile */
+  }
+
+  @media (min-width: 1024px) {
+    .page-padding {
+      padding-left: 1.5rem; /* 24px on desktop */
+      padding-right: 2rem; /* 32px on desktop */
+    }
+  }
+
+  /* Trending slider cards - Spotify size */
+  .trending-card {
+    transition: transform 0.2s ease-in-out;
+    width: 100%;
+    height: 100%;
+  }
+
+  .trending-card:hover {
+    transform: scale(1.02);
+  }
+
+  /* Spotify-style card dimensions */
+  .spotify-card-size {
+    width: 192px; /* 12rem / w-48 */
+    min-width: 192px;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.5);
+    border-radius: 4px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.7);
+  }
+
+  /* Swiper custom styles */
+  .trending-swiper {
+    padding: 0 60px 0 0;
+    margin: 0 -60px 0 0;
+    overflow: visible !important;
+  }
+
+  /* Smooth animation for swiper */
+  .trending-swiper .swiper-wrapper {
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  }
+
+  .trending-swiper .swiper-slide {
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  }
+
+  .trending-swiper .swiper-wrapper {
+    align-items: stretch;
+  }
+
+  .trending-swiper .swiper-slide {
+    height: auto;
+  }
+
+  .trending-swiper .swiper-button-next,
+  .trending-swiper .swiper-button-prev {
+    width: 48px !important;
+    height: 48px !important;
+    background: rgba(0, 0, 0, 0.8) !important;
+    border-radius: 50% !important;
+    color: white !important;
+    opacity: 0 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    margin-top: -24px !important;
+  }
+
+  .trending-swiper:hover .swiper-button-next,
+  .trending-swiper:hover .swiper-button-prev {
+    opacity: 1 !important;
+  }
+
+  .trending-swiper .swiper-button-next:hover,
+  .trending-swiper .swiper-button-prev:hover {
+    background: rgba(0, 0, 0, 1) !important;
+    transform: scale(1.05) !important;
+  }
+
+  .trending-swiper .swiper-button-next::after,
+  .trending-swiper .swiper-button-prev::after {
+    font-size: 16px !important;
+    font-weight: bold !important;
+  }
+
+  .trending-swiper .swiper-button-next {
+    right: 10px !important;
+  }
+
+  .trending-swiper .swiper-button-prev {
+    left: 10px !important;
+  }
+
+  .trending-swiper .swiper-button-disabled {
+    opacity: 0.3 !important;
+  }
+
+  /* Embla Carousel styles */
+  .embla {
+    overflow: hidden;
+    user-select: none;
+    will-change: transform;
+  }
+
+  .embla__container {
+    display: flex;
+    gap: 1.5rem;
+    align-items: stretch;
+    cursor: default;
+    will-change: transform;
+  }
+
+  .embla__slide {
+    flex: 0 0 192px;
+    min-width: 0;
+    will-change: transform;
+  }
+
+  /* Tối ưu hóa performance */
+  .trending-card {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Swiper custom styles */
+  .trending-swiper,
+  .artists-swiper {
+    overflow: visible !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .trending-swiper .swiper-slide,
+  .artists-swiper .swiper-slide {
+    height: auto;
+    max-width: 192px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .trending-swiper .swiper-wrapper,
+  .artists-swiper .swiper-wrapper {
+    align-items: stretch;
+  }
+
+  /* Hide default swiper navigation */
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none !important;
+  }
+
+  /* Prevent text selection causing layout issues */
+  .trending-swiper,
+  .artists-swiper {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+ 
+
+
+}

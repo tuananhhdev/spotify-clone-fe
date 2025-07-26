@@ -1,0 +1,91 @@
+/* Spotify Carousel Exact Style */
+.spotify-carousel {
+  margin: 0;
+  padding: 0;
+  overflow: visible !important;
+  position: relative;
+  width: 100%;
+}
+
+/* Hide scrollbar but allow scrolling */
+.spotify-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.spotify-carousel {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Slide styling */
+.spotify-slide {
+  width: 170px !important; 
+  max-width: 170px !important;
+  min-width: 170px !important;
+  flex-shrink: 0;
+}
+
+/* Make sure arrow navigation buttons don't show */
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  display: none !important;
+}
+
+/* Make sure slides are visible */
+.swiper-slide {
+  height: auto !important;
+  visibility: visible !important;
+}
+
+/* Proper card dimensions */
+.spotify-slide > div {
+  width: 100%;
+  height: 100%;
+  background: #181818;
+  border-radius: 6px;
+  padding: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.spotify-slide > div:hover {
+  background: #282828;
+}
+
+/* Make sure the navigation arrows work */
+.swiper-button-disabled {
+  display: none !important;
+}
+
+/* Fix navigation buttons */
+.spotify-carousel button {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 100;
+}
+
+.spotify-carousel:hover button {
+  opacity: 1;
+}
+
+/* Fix card image dimensions */
+.spotify-slide img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 4px;
+  box-shadow: 0 4px 60px rgba(0,0,0,.5);
+}
+
+/* Fix wrapper */
+.swiper-wrapper {
+  height: auto !important;
+  display: flex;
+}
+
+/* Fix slide sizing for different screens */
+@media (max-width: 640px) {
+  .spotify-slide {
+    width: 160px !important;
+    max-width: 160px !important;
+    min-width: 160px !important;
+  }
+}

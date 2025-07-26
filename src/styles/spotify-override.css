@@ -1,0 +1,57 @@
+/* Additional Spotify override styles */
+
+/* Fix card width */
+.spotify-slide {
+  width: 170px !important;
+}
+
+/* Fix navigation buttons */
+.spotify-carousel .navigation-button {
+  width: 48px;
+  height: 48px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.spotify-carousel:hover .navigation-button {
+  opacity: 1;
+}
+
+.spotify-carousel .navigation-button.prev {
+  left: -12px;
+}
+
+.spotify-carousel .navigation-button.next {
+  right: -12px;
+}
+
+/* Fix card image sizing */
+.spotify-card-image {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Add proper spacing */
+.spotify-carousel-container {
+  padding: 0 4px;
+}
+
+/* Handle slide visibility */
+.swiper-slide-visible {
+  visibility: visible !important;
+}
