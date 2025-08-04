@@ -5,6 +5,7 @@ export const artists: Artist[] = [
         id: '1',
         name: 'Sơn Tùng M-TP',
         image: 'https://i.scdn.co/image/ab676161000051745a79a6ca8c60e4ec1440be53',
+        background: "https://image-cdn-ak.spotifycdn.com/image/ab6761860000eab1bfff12c781d46c46b5268efb",
         followers: 85000000,
         isFollowing: true,
         songs: ['5', '6']
@@ -13,14 +14,16 @@ export const artists: Artist[] = [
         id: '2',
         name: 'HIEUTHUHAI',
         image: 'https://i.scdn.co/image/ab6761610000517421942907035a43a2d118c55c',
+        background: "https://i2o.scdn.co/image/ab676186000016676498b53492e59c6d856df385",
         followers: 45000000,
         isFollowing: false,
         songs: ['4', '7']
     },
     {
         id: '3',
-        name: 'TLINH',
+        name: 'tlinh',
         image: 'https://avatar-ex-swe.nixcdn.com/singer/avatar/2024/10/10/v/i/I/O/1728555178122.png',
+        background: "https://i2o.scdn.co/image/ab67618600001667a1721bb2de9dcc969f463144",
         followers: 67000000,
         isFollowing: true,
         songs: ['2'] // Levitating
@@ -29,6 +32,7 @@ export const artists: Artist[] = [
         id: '4',
         name: 'WXRDIE',
         image: 'https://i1.sndcdn.com/avatars-3SzBkNzqNX0gy8VX-tWIjhA-t1080x1080.jpg',
+        background: "https://i2o.scdn.co/image/ab67618600001667f85043b3e2f82124b9184752",
         followers: 52000000,
         isFollowing: false,
         songs: ['8'] // Chưa có bài hát nào trong data
@@ -36,7 +40,8 @@ export const artists: Artist[] = [
     {
         id: '5',
         name: 'B Ray',
-        image: 'https://scontent.fsgn2-5.fna.fbcdn.net/v/t39.30808-6/518632635_1272918667530709_4709114056259205336_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=104&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGnDb_1XhIJS5xMi1KAy3u3tLW5smhJ2Iy0tbmyaEnYjK-lqi8M3txu4XgiEvpLuhhjq_HeCK7jAmh8tb6F5Efq&_nc_ohc=L80ZOiWEugoQ7kNvwF3ksyH&_nc_oc=AdmLpNfp3DiGxoKnV_XAExMcHIMQ6ee6gvqmqkW4c7sDJ0WMi_wzniP8p1ON5Zm6hvRP0-ixYjr9lqgXS7k_PQSv&_nc_zt=23&_nc_ht=scontent.fsgn2-5.fna&_nc_gid=lh0dc0tJch1-AuOuGb18aw&oh=00_AfRq-B8yyVGuIHK1yAOpsxuRKi3dVq_hGOAn6hRMwi5_NQ&oe=688961EF',
+        image: 'https://i.scdn.co/image/ab6761610000f17869b0142434aee6cd70a581bc',
+        background: "https://i2o.scdn.co/image/ab67618600001667dcecd5224cfd3fc63f1e4846",
         followers: 15000000,
         isFollowing: true,
         songs: ['1'] // Feel At Home
@@ -45,6 +50,7 @@ export const artists: Artist[] = [
         id: '6',
         name: 'Orange',
         image: 'https://yt3.googleusercontent.com/L5dNvPrNZBK0-71Sfh6N0jbcAYvzuxHcy9gi23TsrzZnqzjQZKkbbdgeEPZ9p0RHmJZ0zZ3o=s900-c-k-c0x00ffffff-no-rj',
+        background: "https://i2o.scdn.co/image/ab67618600001667ab3efb003ed6b3842213d2fc",
         followers: 8000000,
         isFollowing: false,
         songs: ['3']
@@ -52,7 +58,8 @@ export const artists: Artist[] = [
     {
         id: '7',
         name: 'Central Cee',
-        image: 'https://file.hstatic.net/200000289033/article/0x1900-000000-80-0-0_4a8f2a4a55374c408171320de62eee21.jpeg',
+        image: 'https://i.scdn.co/image/ab6761610000f178f6469f2cbf0a7e78744a3173',
+        background: "https://i2o.scdn.co/image/ab6761860000166776804c2885c1cfeb27927793",
         followers: 12000000,
         isFollowing: true,
         songs: ['9']
@@ -60,7 +67,8 @@ export const artists: Artist[] = [
     {
         id: '8',
         name: 'SZA',
-        image: 'https://m.media-amazon.com/images/I/91BazzuLE+L._UF894,1000_QL80_.jpg',
+        image: 'https://i.scdn.co/image/ab6761610000f178fd0a9fb6c252a3ba44079acf',
+        background: "https://i2o.scdn.co/image/ab6761860000166780a1a165695b901e37f445a3",
         followers: 6000000,
         isFollowing: false,
         songs: ['10']

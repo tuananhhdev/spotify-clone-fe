@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Play, Trash2 } from 'lucide-react';
-import { useMusicContext } from '../contexts/MusicContext';
+import { useMusicContext } from '../hook/useMusicContext';
 
 const Queue: React.FC = () => {
   const {

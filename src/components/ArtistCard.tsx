@@ -1,82 +1,84 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Play, Pause } from 'lucide-react';
-import type { Artist } from '../types';
+import { Play } from 'lucide-react';
 
 interface ArtistCardProps {
-  artist: Artist;
-  isPlaying?: boolean;
-  onPlay?: (artist: Artist) => void;
+  artists: Array<{
+    id: string;
+    name: string;
+    image: string;
+    followers: number;
+  }>;
+  onPlayArtist?: (artistId: string) => void;
+  onArtistClick?: (artistId: string) => void;
 }
 
 const ArtistCard: React.FC<ArtistCardProps> = ({
-  artist,
-  isPlaying = false,
-  onPlay
+  artists,
+  onPlayArtist,
+  onArtistClick,
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
-  const handlePlayClick = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handlePlay = (artistId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (onPlay) {
-      onPlay(artist);
-    }
+    if (onPlayArtist) onPlayArtist(artistId);
   };
 
-  const formatFollowers = (count: number) => {
-    if (count >= 1000000) {
-      return `${(count / 1000000).toFixed(1)}M`;
-    } else if (count >= 1000) {
-      return `${(count / 1000).toFixed(1)}K`;
-    }
-    return count.toString();
+  const handleArtistClick = (artistId: string) => {
+    if (onArtistClick) onArtistClick(artistId);
   };
 
   return (
-    <Link to={`/artist/${artist.id}`}>
-      <div
-        className="bg-gray-800/40 hover:bg-gray-800/60 p-4 rounded-lg transition-all duration-300 cursor-pointer group"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <div className="relative mb-4">
-          <img
-            src={artist.image}
-            alt={artist.name}
-            loading="lazy"
-            className="w-full aspect-square object-cover rounded-full shadow-lg"
-          />
-
-          {/* Play Button Overlay */}
-          <button
-            onClick={handlePlayClick}
-            className={`absolute bottom-2 right-2 w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-black shadow-lg transition-all duration-300 ${isHovered || isPlaying
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-2'
-              } hover:scale-105 hover:bg-green-400`}
-          >
-            {isPlaying ? (
-              <Pause className="w-5 h-5" />
-            ) : (
-              <Play className="w-5 h-5 ml-0.5" />
-            )}
-          </button>
-        </div>
-
-        <div className="text-center space-y-1">
-          <h3 className="text-white font-medium text-sm truncate group-hover:text-green-400 transition-colors">
-            {artist.name}
-          </h3>
-          <p className="text-gray-400 text-xs">
-            {formatFollowers(artist.followers)} followers
-          </p>
-          <p className="text-gray-500 text-xs">
-            Artist
-          </p>
-        </div>
+    <div className="min-h-screen text-white p-6 pt-10 pb-28 sm:py-10 bg-[#121212]">
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold">Popular artists</h1>
       </div>
-    </Link>
+
+      {/* Artists Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        {artists.map((artist) => (
+          <div
+            key={artist.id}
+            className="group relative cursor-pointer rounded-lg overflow-hidden transition-all duration-300 p-4 hover:bg-[#282828]"
+            onMouseEnter={() => setHoveredCard(artist.id)}
+            onMouseLeave={() => setHoveredCard(null)}
+            onClick={() => handleArtistClick(artist.id)}
+          >
+            {/* Artist Image */}
+            <div className="relative w-full aspect-square mb-4">
+              <img
+                src={artist.image}
+                alt={artist.name}
+                className="w-full h-full object-cover rounded-full"
+              />
+
+              {/* Play Button - nằm ngoài hình tròn */}
+              <div
+                className={`absolute bottom-2 right-2 transition-all duration-300 z-10 ${hoveredCard === artist.id ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                  }`}
+              >
+                <button
+                  onClick={(e) => handlePlay(artist.id, e)}
+                  className="w-12 h-12 bg-[#1fdf64] rounded-full flex items-center justify-center shadow-lg hover:bg-[#1ed760] transition-all duration-200"
+                >
+                  <Play className="w-6 h-6 text-black fill-current" />
+                </button>
+              </div>
+            </div>
+
+
+            {/* Artist Info */}
+            <div>
+              <h3 className="text-white font-semibold text-base truncate hover:underline">
+                {artist.name}
+              </h3>
+              <p className="text-[#a7a7a7] text-sm">Artist</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 

@@ -1,27 +1,31 @@
 
 import React from 'react';
-import { useMusicContext } from '../contexts/MusicContext';
 import PageTransition from '../components/PageTransition';
 import FadeInSection from '../components/FadeInSection';
 import TrendingSection from '../components/TrendingSection';
 import PopularArtistsSection from '../components/PopularArtistsSection';
+import { useMusicContext } from '../hook/useMusicContext';
+import Footer from '../components/Footer';
 
 const Home: React.FC = () => {
   const { songs, artists } = useMusicContext();
-  const trendingSongs = songs;
-  const popularArtists = artists;
 
   return (
-    <PageTransition className="min-h-full text-white overflow-hidden">
-      <div className="py-8 w-full max-w-full min-w-0">
+    <PageTransition>
+      <div className="pt-5 sm:pt-8 pl-5 sm:pl-8">
         <FadeInSection>
-          <TrendingSection songs={trendingSongs} />
+          <TrendingSection songs={songs} />
         </FadeInSection>
 
-        <FadeInSection delay={0.3}>
-          <PopularArtistsSection artists={popularArtists} />
+        <FadeInSection>
+          <PopularArtistsSection artists={artists} />
+        </FadeInSection>
+
+        <FadeInSection>
+          <Footer />
         </FadeInSection>
       </div>
+
     </PageTransition>
   );
 };

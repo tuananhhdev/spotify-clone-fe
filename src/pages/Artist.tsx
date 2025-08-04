@@ -1,137 +1,230 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import { Play, Pause, MoreHorizontal, Heart } from 'lucide-react';
 import { useParams } from 'react-router-dom';
-import { Play, UserPlus, MoreHorizontal } from 'lucide-react';
-import { useMusicContext } from '../contexts/MusicContext';
+import { useMusicContext } from '../hook/useMusicContext';
+import useDominantColor from '../hook/useDominantColor';
+import { usePageTitle } from '../hook/usePageTiltle';
 
-const Artist: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const { artists, getSongsByArtist, playSong } = useMusicContext();
-  const artist = artists.find(a => a.id === id);
+const Artist = () => {
+  const {
+    currentSong,
+    isPlaying,
+    artists,
+    getSongsByArtist,
+    playSong,
+    toggleLike,
+  } = useMusicContext();
+
+  const { id } = useParams();
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [showAllSongs, setShowAllSongs] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const imgRef = useRef(null);
+
+  const artist = artists.find((a) => a.id === id);
+
+  usePageTitle(`${artist?.name} | Spotify`);
+
+  const { dominantColor, isLoading: colorLoading } = useDominantColor(artist?.background || '');
 
   if (!artist) {
     return (
-      <div className="min-h-full text-white flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">Artist not found</h1>
-          <p className="text-gray-400">The artist you're looking for doesn't exist.</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black flex items-center justify-center px-6">
+        <h1 className="text-2xl font-bold text-white">Artist not found</h1>
       </div>
     );
   }
 
-  // Get artist's songs using the new function
   const artistSongs = getSongsByArtist(artist.id);
+  const displayedSongs = showAllSongs ? artistSongs : artistSongs.slice(0, 5);
+  const isCurrentArtist = currentSong && artistSongs.some((s) => s.id === currentSong.id);
 
-  const formatFollowers = (count: number) => {
-    if (count >= 1000000) {
-      return `${(count / 1000000).toFixed(1)}M`;
-    } else if (count >= 1000) {
-      return `${(count / 1000).toFixed(1)}K`;
+  const handlePlayPause = (songId?: string) => {
+    if (songId) {
+      const song = artistSongs.find((s) => s.id === songId);
+      if (song) playSong(song);
+    } else if (artistSongs.length > 0) {
+      playSong(artistSongs[0]);
     }
-    return count.toString();
+  };
+
+  const formatNumber = (n: number) => {
+    if (n >= 1000000) {
+      return (n / 1000000).toFixed(1) + 'M';
+    } else if (n >= 1000) {
+      return (n / 1000).toFixed(1) + 'K';
+    }
+    return n.toLocaleString('vi-VN');
   };
 
   return (
-    <div className="min-h-full bg-gradient-to-b from-blue-900 via-blue-800 to-black">
-      {/* Artist Header */}
-      <div className="pl-6 pr-8 py-8 pb-6">
-        <div className="flex items-end space-x-6">
+    <div className="min-h-screen text-white"
+      style={{
+        background: colorLoading
+          ? 'linear-gradient(to bottom, #1e1e1e, #121212)'
+          : `linear-gradient(to bottom, ${dominantColor} 0%, #121212 75%, #121212 100%)`,
+      }}
+    >
+      {/* Hero Section - Spotify-like compact height */}
+      <div className="relative w-full h-64 sm:h-72 md:h-80 lg:h-96 overflow-hidden"> {/* Đã điều chỉnh các giá trị h-* ở đây */}
+        {/* Background Image with responsive object positioning */}
+        <div className="absolute inset-0">
           <img
-            src={artist.image}
+            ref={imgRef}
+            src={artist.background}
             alt={artist.name}
-            className="w-60 h-60 rounded-full shadow-2xl object-cover"
+            className={`w-full h-full object-cover object-center transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+            onLoad={() => setImageLoaded(true)}
+            onError={() => {
+              console.error('Image failed to load:', artist.background);
+              setImageLoaded(true);
+            }}
           />
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center mb-2">
-              <svg className="w-6 h-6 text-blue-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              <span className="text-blue-400 text-sm font-medium">Verified Artist</span>
-            </div>
-            <h1 className="text-white text-6xl font-bold mb-6 leading-none">
-              {artist.name}
-            </h1>
-            <p className="text-gray-300 text-lg">
-              {formatFollowers(artist.followers)} monthly listeners
-            </p>
+
+          {/* Loading gradient placeholder with dominant color */}
+          {!imageLoaded && (
+            <div
+              className="absolute inset-0 w-full h-full animate-pulse"
+              style={{
+                background: colorLoading
+                  ? 'linear-gradient(135deg, #374151 0%, #1f2937 50%, #111827 100%)'
+                  : `linear-gradient(135deg, ${dominantColor} 0%, #1f2937 50%, #111827 100%)`,
+              }}
+            />
+          )}
+        </div>
+
+        {/* Responsive overlay gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 sm:via-black/30 to-transparent" />
+
+        {/* Content container with responsive padding */}
+        <div className="relative z-10 flex flex-col justify-end h-full p-4 sm:p-6 lg:p-8">
+          {/* Verified Badge - responsive sizing */}
+          <div className="flex items-center bg-green-500 text-black text-xs sm:text-sm font-semibold px-2 sm:px-3 py-1 rounded-full w-fit mb-2 sm:mb-3">
+            <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1 fill-current" viewBox="0 0 16 16">
+              <path d="M13.985 2.383L5.127 12.754 1.388 8.375l-.658.77 4.397 5.149 9.618-11.262z" />
+            </svg>
+            <span className="hidden sm:inline">Verified Artist</span>
+            <span className="sm:hidden">Verified</span>
           </div>
+
+          {/* Artist Name - Spotify-style typography */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-2 sm:mb-3 drop-shadow-lg">
+            {artist.name}
+          </h1>
+
+          {/* Followers count - responsive text */}
+          <p className="text-white/80 text-sm sm:text-base lg:text-lg font-medium">
+            {formatNumber(artist.followers)} monthly listeners
+          </p>
         </div>
       </div>
 
-      {/* Controls */}
-      <div className="pl-6 pr-8 py-6 bg-gradient-to-b from-black/20 to-transparent">
-        <div className="flex items-center space-x-6">
+      {/* Main Content - responsive container */}
+      <div className="px-4 sm:px-6 lg:px-8 xl:px-12 py-4 sm:py-6 lg:py-8 max-w-7xl mx-auto">
+        {/* Control Buttons - responsive sizing and spacing */}
+        <div className="flex items-center gap-3 sm:gap-4 lg:gap-5 mb-6 sm:mb-8">
+          {/* Play/Pause Button */}
           <button
-            onClick={() => artistSongs.length > 0 && playSong(artistSongs[0])}
-            className="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center text-black hover:scale-105 transition-transform disabled:opacity-50"
-            disabled={artistSongs.length === 0}
+            onClick={() => handlePlayPause()}
+            className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-green-500 hover:bg-green-400 text-black rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 active:scale-95"
           >
-            <Play className="text-xl ml-1" />
+            {isPlaying && isCurrentArtist ? (
+              <Pause className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />
+            ) : (
+              <Play className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 ml-0.5" />
+            )}
           </button>
 
-          <button className="border border-gray-400 text-white px-4 py-2 rounded-full text-sm font-medium hover:border-white transition-colors flex items-center space-x-2">
-            <UserPlus />
-            <span>{artist.isFollowing ? 'Following' : 'Follow'}</span>
+          {/* Follow Button */}
+          <button
+            onClick={() => setIsFollowing(!isFollowing)}
+            className={`border border-white/40 text-white px-4 sm:px-6 lg:px-8 py-2 sm:py-2.5 lg:py-3 rounded-full hover:border-white/60 transition-all duration-200 text-sm sm:text-base lg:text-lg font-medium ${isFollowing
+              ? 'bg-white/10 border-white/60'
+              : 'hover:bg-white/5'
+              }`}
+          >
+            {isFollowing ? 'Following' : 'Follow'}
           </button>
 
-          <button className="text-gray-400 hover:text-white transition-colors">
-            <MoreHorizontal className="text-xl" />
+          {/* More Options */}
+          <button className="text-white/60 hover:text-white p-2 sm:p-2.5 lg:p-3 rounded-full hover:bg-white/10 transition-all duration-200">
+            <MoreHorizontal className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />
           </button>
         </div>
-      </div>
 
-      {/* Popular Songs */}
-      <div className="pl-6 pr-8 pb-8">
-        <h2 className="text-white text-2xl font-bold mb-6">Popular</h2>
-
-        {artistSongs.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-gray-400 text-lg">No songs available for this artist yet.</p>
-          </div>
-        ) : (
-          <div>
-            <div className="space-y-2">
-              {artistSongs.slice(0, 5).map((song, index) => (
-                <div
-                  key={song.id}
-                  className="flex items-center space-x-4 p-2 rounded-md hover:bg-white/10 transition-colors group cursor-pointer"
-                >
-                  <span className="text-gray-400 text-sm w-4 text-center group-hover:hidden">
-                    {index + 1}
-                  </span>
-                  <button
-                    onClick={() => playSong(song)}
-                    className="hidden group-hover:block text-white hover:text-green-500 transition-colors"
-                  >
-                    <Play className="text-sm" />
-                  </button>
-
-                  <img
-                    src={song.cover}
-                    alt={song.title}
-                    className="w-10 h-10 rounded"
-                  />
-
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-white font-medium truncate">
-                      {song.title}
-                    </h3>
-                  </div>
-
-                  <span className="text-gray-400 text-sm">
-                    {song.duration}
-                  </span>
-                </div>
-              ))}
-            </div>
-
+        {/* Popular Songs Section */}
+        <div className="w-full">
+          {/* Section Header */}
+          <div className="flex justify-between items-center mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold">Popular</h2>
             {artistSongs.length > 5 && (
-              <button className="text-gray-400 hover:text-white text-sm font-medium mt-4">
-                Show more
+              <button
+                onClick={() => setShowAllSongs(!showAllSongs)}
+                className="text-sm sm:text-base lg:text-lg text-white/60 hover:text-white transition-colors duration-200 font-medium hover:underline"
+              >
+                {showAllSongs ? 'Show less' : 'Show all'}
               </button>
             )}
           </div>
-        )}
+
+          {/* Songs List - responsive layout */}
+          <div className="space-y-1 sm:space-y-2">
+            {displayedSongs.map((song, index) => (
+              <div
+                key={song.id}
+                className="group flex items-center py-2 sm:py-3 lg:py-4 px-2 sm:px-3 lg:px-4 rounded-lg cursor-pointer hover:bg-white/5 transition-all duration-200"
+                onClick={() => handlePlayPause(song.id)}
+              >
+                {/* Track Number / Play Button */}
+                <div className="w-6 sm:w-8 lg:w-10 flex justify-center items-center mr-3 sm:mr-4 lg:mr-5">
+                  <span className={`text-white/60 group-hover:hidden text-sm sm:text-base lg:text-lg font-medium ${currentSong?.id === song.id ? 'text-green-500' : ''
+                    }`}>
+                    {index + 1}
+                  </span>
+                  <div className="hidden group-hover:flex">
+                    <Play className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" />
+                  </div>
+                </div>
+
+                {/* Album Cover - responsive sizing */}
+                <img
+                  src={song.cover}
+                  alt={song.title}
+                  className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded object-cover mr-3 sm:mr-4 lg:mr-5 shadow-md flex-shrink-0"
+                />
+
+                {/* Song Info - responsive typography */}
+                <div className="flex-1 min-w-0 mr-3 sm:mr-4 lg:mr-6">
+                  <p className={`text-sm sm:text-base lg:text-lg truncate font-medium transition-colors duration-200 ${currentSong?.id === song.id ? 'text-green-500' : 'text-white group-hover:text-white'
+                    }`}>
+                    {song.title}
+                  </p>
+                </div>
+
+                {/* Like Button - responsive sizing */}
+                <button
+                  className={`mr-3 sm:mr-4 lg:mr-6 transition-all duration-200 p-1 sm:p-1.5 lg:p-2 rounded-full hover:bg-white/10 ${song.isLiked
+                    ? 'text-green-500 opacity-100'
+                    : 'text-white/40 hover:text-white opacity-0 group-hover:opacity-100'
+                    }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleLike(song.id);
+                  }}
+                >
+                  <Heart className={`w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 ${song.isLiked ? 'fill-current' : ''}`} />
+                </button>
+
+                {/* Duration - responsive sizing */}
+                <div className="text-white/60 text-sm sm:text-base lg:text-lg w-12 sm:w-14 lg:w-16 text-right font-mono">
+                  {song.duration}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

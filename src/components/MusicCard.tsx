@@ -1,7 +1,8 @@
 import React, { useState, useCallback, memo } from 'react';
-import { Play, Pause, Plus } from 'lucide-react';
+import { motion } from 'framer-motion';
 import type { Song } from '../types';
-import { useMusicContext } from '../contexts/MusicContext';
+import { useMusicContext } from '../hook/useMusicContext';
+import { FaPause, FaPlay } from 'react-icons/fa6';
 
 interface MusicCardProps {
   song: Song;
@@ -9,7 +10,7 @@ interface MusicCardProps {
 
 const MusicCard: React.FC<MusicCardProps> = memo(({ song }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const { currentSong, isPlaying, playSong, pauseSong, addToQueue } = useMusicContext();
+  const { currentSong, isPlaying, playSong, pauseSong } = useMusicContext();
 
   const isCurrentSong = currentSong?.id === song.id;
   const isCurrentlyPlaying = isCurrentSong && isPlaying;
@@ -17,6 +18,7 @@ const MusicCard: React.FC<MusicCardProps> = memo(({ song }) => {
   const handlePlayClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
     if (isCurrentSong) {
       if (isPlaying) {
         pauseSong();
@@ -28,72 +30,65 @@ const MusicCard: React.FC<MusicCardProps> = memo(({ song }) => {
     }
   }, [isCurrentSong, isPlaying, pauseSong, playSong, song]);
 
-  const handleAddToQueue = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    addToQueue(song);
-  }, [addToQueue, song]);
-
   return (
     <div
-      className="relative cursor-pointer group w-full flex-shrink-0 min-w-0 mr-4 transition-all duration-300 ease-out"
+      className="group cursor-pointer p-1 rounded-lg transition-all duration-300 w-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Background overlay - radius tròn hơn */}
-      <div className={`absolute -inset-2 rounded-xl bg-gradient-to-b via-gray-300/15 to-white/5 transition-opacity duration-500 ease-out ${isHovered ? 'opacity-100' : 'opacity-0'
-        }`} />
+      {/* Album Cover Container */}
+      <div className="relative mb-3 aspect-square w-full overflow-hidden rounded-lg">
+        <motion.img
+          src={song.cover}
+          alt={song.title}
+          className="w-full h-full object-cover"
+          animate={{
+            scale: isHovered ? 1.1 : 1,
+          }}
+          transition={{
+            duration: 0.4,
+            ease: [0.25, 0.46, 0.45, 0.94]
+          }}
+        />
 
-      {/* Card content */}
-      <div className="relative z-10">
-        <div className="relative mb-4 mx-1 mt-1">
-          <img
-            src={song.cover}
-            alt={song.title}
-            loading="lazy"
-            className="aspect-square w-full max-w-[240px] object-cover rounded-xl"
-          />
 
-          {/* Overlay container cho buttons */}
-          <div className="absolute inset-0 rounded-xl overflow-hidden">
+        {/* Play Button */}
+        <motion.button
+          onClick={handlePlayClick}
+          className="absolute bottom-4 right-4 w-12 h-12 bg-[#1db954] rounded-full flex items-center justify-center text-black shadow-xl hover:scale-105 hover:bg-[#1ed760] transition-all duration-500 cursor-pointer"
+          initial={{
+            opacity: 0,
+            scale: 0.8,
+            y: 8
+          }}
+          animate={{
+            opacity: isHovered || isCurrentlyPlaying ? 1 : 0,
+            scale: isHovered || isCurrentlyPlaying ? 1 : 0.8,
+            y: isHovered || isCurrentlyPlaying ? 0 : 8
+          }}
+          transition={{ duration: 0.2 }}
+        >
+          {isCurrentlyPlaying ? (
+            <FaPause className="w-5 h-5" />
+          ) : (
+            <FaPlay className="w-5 h-5 ml-0.5" />
+          )}
+        </motion.button>
+      </div>
 
-            {/* Add to Queue Button - tròn hơn */}
-            <button
-              onClick={handleAddToQueue}
-              className={`absolute top-4 right-4 w-11 h-11 bg-black/70 backdrop-blur-sm rounded-full flex items-center justify-center text-white shadow-xl transition-all duration-500 ease-out will-change-transform ${isHovered
-                ? 'opacity-100 translate-y-0 scale-100'
-                : 'opacity-0 translate-y-3 scale-75'
-                } hover:scale-110 hover:bg-black/90 hover:shadow-2xl active:scale-95`}
-              title="Add to queue"
-            >
-              <Plus className="w-5 h-5" />
-            </button>
-
-            {/* Play Button Overlay - đã là rounded-full nên OK */}
-            <button
-              onClick={handlePlayClick}
-              className={`absolute bottom-3 right-3 w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-black shadow-lg transition-all duration-300 ease-out ${isHovered || isCurrentlyPlaying
-                ? 'opacity-100 translate-y-0 scale-100'
-                : 'opacity-0 translate-y-2 scale-95'
-                } hover:scale-105 hover:bg-green-400 active:scale-95`}
-            >
-              {isCurrentlyPlaying ? (
-                <Pause className="w-5 h-5" />
-              ) : (
-                <Play className="w-5 h-5 ml-0.5" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        <div className="space-y-1 mt-3 mx-1 mb-1">
-          <h3 className="text-white font-semibold text-base truncate leading-tight">
-            {song.title}
-          </h3>
-          <p className="text-gray-400 text-sm truncate pb-2">{song.artist}</p>
-        </div>
+      {/* Song Info */}
+      <div className="space-y-0.5">
+        <h3 className="text-white font-semibold text-sm truncate">
+          {song.title}
+        </h3>
+        <p className="text-[#b3b3b3] text-xs truncate">
+          {song.artist}
+        </p>
       </div>
     </div>
   );
 });
+
+MusicCard.displayName = 'MusicCard';
 
 export default MusicCard;

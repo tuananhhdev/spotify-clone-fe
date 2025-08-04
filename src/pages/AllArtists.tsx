@@ -1,23 +1,32 @@
 import React from 'react';
-import { useMusicContext } from '../contexts/MusicContext';
-import ArtistCard from '../components/ArtistCard';
+import { useNavigate } from 'react-router-dom';
 import PageTransition from '../components/PageTransition';
+import { useMusicContext } from '../hook/useMusicContext';
+import ArtistCard from '../components/ArtistCard';
 
 const AllArtists: React.FC = () => {
-  const { artists } = useMusicContext();
+  const { artists, playSong, setPlaylist, getSongsByArtist } = useMusicContext();
+  const navigate = useNavigate();
+
+  const handlePlayArtist = (artistId: string) => {
+    const artistSongs = getSongsByArtist(artistId);
+    if (artistSongs.length > 0) {
+      setPlaylist(artistSongs);
+      playSong(artistSongs[0]);
+    }
+  };
+
+  const handleArtistClick = (artistId: string) => {
+    navigate(`/artist/${artistId}`);
+  };
 
   return (
     <PageTransition>
-      <div className="min-h-full text-white">
-        <div className="pl-6 pr-8 py-8">
-          <h1 className="text-white text-4xl font-bold mb-6">All Artists</h1>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-            {artists.map((artist) => (
-              <ArtistCard key={artist.id} artist={artist} />
-            ))}
-          </div>
-        </div>
-      </div>
+      <ArtistCard
+        artists={artists}
+        onPlayArtist={handlePlayArtist}
+        onArtistClick={handleArtistClick}
+      />
     </PageTransition>
   );
 };

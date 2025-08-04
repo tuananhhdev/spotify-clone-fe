@@ -37,7 +37,7 @@ export const songs: Song[] = [
         title: 'KHÔNG ĐAU NỮA RỒI',
         artist: 'Orange, Mỹ Mỹ, 52Hz, Châu Bùi, Pháp Kiều',
         album: 'EM XINH SAY HI',
-        cover: 'https://bloganchoi.com/wp-content/uploads/2025/06/khong-dau-nua-roi-lyrics-em-xinh-say-hi-3-696x696.jpg',
+        cover: 'api/wp-content/uploads/2025/06/khong-dau-nua-roi-lyrics-em-xinh-say-hi-3-696x696.jpg',
         audio: audio3,
         duration: '5:27',
         isLiked: true

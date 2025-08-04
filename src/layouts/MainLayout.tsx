@@ -6,38 +6,39 @@ import PlayerBar from '../components/PlayerBar';
 import MobileNavigation from '../components/MobileNavigation';
 import MobileSidebar from '../components/MobileSidebar';
 import Queue from '../components/Queue';
-import { useMusicContext } from '../contexts/MusicContext';
+import { useMusicContext } from '../hook/useMusicContext';
 
 const MainLayout: React.FC = () => {
   const { currentSong } = useMusicContext();
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  const toggleMobileSidebar = () => {
-    setIsMobileSidebarOpen(!isMobileSidebarOpen);
-  };
-
-  const closeMobileSidebar = () => {
-    setIsMobileSidebarOpen(false);
-  };
+  const closeMobileSidebar = () => setIsMobileSidebarOpen(false);
+  const openMobileSidebar = () => setIsMobileSidebarOpen(true);
 
   return (
-    <div className="bg-black flex h-screen overflow-hidden">
-      <div className="fixed top-0 left-0 right-0 z-50 will-change-transform">
-        <Header onToggleSidebar={toggleMobileSidebar} />
+    <div className="bg-black h-screen overflow-hidden flex flex-col">
+      <div className="fixed top-0 left-0 right-0 z-50 h-16">
+        <Header onOpenMenu={openMobileSidebar} />
       </div>
 
-      <div className={`flex w-full h-full pt-16 ${currentSong ? 'pb-40 lg:pb-32' : 'pb-20 lg:pb-4'}`}>
-        <div className="hidden lg:block w-80 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
+      {/* Main Content Area */}
+      <div
+        className={`flex flex-1 pt-16 sm:px-2 ${currentSong ? 'pb-40 sm:pb-20' : 'sm:pb-2'} overflow-hidden`}
+      >
+        {/* Sidebar */}
+        <div className="hidden lg:block w-[400px] h-full rounded-lg overflow-hidden bg-gradient-to-b from-[#1a1a1a] via-[#121212] to-[#0a0a0a] flex-shrink-0">
           <Sidebar />
         </div>
 
-        <main className="flex-1 text-white p-2 pr-4 lg:pr-6 h-full overflow-hidden">
-          <div className="bg-gradient-to-b from-[#1a1a1a] via-[#121212] to-[#0a0a0a] rounded-lg h-full overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent scroll-smooth">
+        {/* Main Content */}
+        <main className="flex-1 h-full overflow-hidden text-white ml-0 lg:ml-2">
+          <div className="bg-gradient-to-b from-[#1a1a1a] via-[#121212] to-[#0a0a0a] rounded-none lg:rounded-lg h-full overflow-y-auto ">
             <Outlet />
           </div>
         </main>
       </div>
 
+      {/* Fixed bottom elements */}
       {currentSong && <PlayerBar />}
       <Queue />
       <MobileNavigation />

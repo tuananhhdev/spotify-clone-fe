@@ -12,3 +12,5 @@ declare module 'swiper/css/free-mode' {
     const value: string;
     export default value;
 }
+
+declare module 'swiper/css/effect-fade';
