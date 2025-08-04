@@ -27,7 +27,7 @@ const TrendingSection: React.FC<TrendingSectionProps> = ({ songs }) => {
         <h2 className="text-white text-3xl sm:text-3xl lg:text-3xl font-bold cursor-pointer truncate">
           Trending songs
         </h2>
-        <Link to={'/trendings'}>
+        <Link to={'/trending'}>
           <motion.button
             className="text-[#b3b3b3] text-sm font-bold hover:underline transition-colors duration-200 mr-7 sm:mr-8 cursor-pointer"
             whileHover={{ scale: 1.05 }}

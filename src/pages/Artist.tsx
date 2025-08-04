@@ -65,9 +65,7 @@ const Artist = () => {
           : `linear-gradient(to bottom, ${dominantColor} 0%, #121212 75%, #121212 100%)`,
       }}
     >
-      {/* Hero Section - Spotify-like compact height */}
-      <div className="relative w-full h-64 sm:h-72 md:h-80 lg:h-96 overflow-hidden"> {/* Đã điều chỉnh các giá trị h-* ở đây */}
-        {/* Background Image with responsive object positioning */}
+      <div className="relative w-full h-64 sm:h-72 md:h-80 lg:h-96 overflow-hidden"> 
         <div className="absolute inset-0">
           <img
             ref={imgRef}
@@ -110,7 +108,7 @@ const Artist = () => {
           </div>
 
           {/* Artist Name - Spotify-style typography */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-2 sm:mb-3 drop-shadow-lg">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-2 sm:mb-3 drop-shadow-lg cursor-pointer">
             {artist.name}
           </h1>
 
