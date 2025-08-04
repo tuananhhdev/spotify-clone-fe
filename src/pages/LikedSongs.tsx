@@ -71,7 +71,7 @@ const LikedSongs: React.FC = () => {
     return `${likedSongs.length * 3} min`;
   };
 
- const headerVariants: Variants = {
+  const headerVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100, damping: 15, duration: 0.8 } },
   };
@@ -372,7 +372,9 @@ const LikedSongs: React.FC = () => {
                             className="text-white"
                             whileHover={{ scale: 1.2 }}
                           >
-                            <Play className="w-4 h-4" fill="currentColor" />
+                            <Play className="w-4 h-4 cursor-pointer" fill="currentColor"
+
+                            />
                           </motion.button>
                         ) : (
                           <span className="text-gray-400 text-sm group-hover:text-white transition-colors">
