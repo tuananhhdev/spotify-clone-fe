@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import  { useState, useRef } from 'react';
 import { Play, Pause, MoreHorizontal, Heart } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { useMusicContext } from '../hook/useMusicContext';

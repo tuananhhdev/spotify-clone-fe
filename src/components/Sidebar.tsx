@@ -72,7 +72,7 @@ const Sidebar: React.FC = () => {
               className="space-y-2 mb-8"
               variants={itemVariants}
             >
-              {navItems.map((item, index) => {
+              {navItems.map((item) => {
                 const IconComponent = item.icon;
                 return (
                   <motion.a
